@@ -33,6 +33,9 @@ namespace SeguidordeLinha {
 
         whiteLeft = getFilteredReading(leftSensorPin, true);
         whiteCenter = getFilteredReading(centerSensorPin, true);
+    basic.showString("A+B");
+        while (!input.buttonIsPressed(Button.AB)) {
+            basic.pause(100);
         whiteRight = getFilteredReading(rightSensorPin, true);
 
         basic.showString("B");
