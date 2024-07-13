@@ -46,7 +46,7 @@ namespace SeguidordeLinha {
         blackRight = getFilteredReading(rightSensorPin, true);
 
      basic.showString("W");
-        while (!input.buttonIsPressed(Button.A)+!input.buttonIsPressed(Button.A)) {
+        while (!input.buttonIsPressed(Button.A)+!input.buttonIsPressed(Button.B)) {
             basic.pause(100);
         }
         basic.showIcon(IconNames.Yes);
