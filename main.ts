@@ -41,7 +41,7 @@ namespace SeguidordeLinha {
             basic.pause(100);
         }
      basic.showString("AB");
-        while (!input.buttonIsPressed(Button.AB)) {
+        while (!input.buttonIsPressed(Button.A+B)) {
             basic.pause(100);
         }
 
