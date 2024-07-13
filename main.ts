@@ -5,7 +5,7 @@
 // @param duration duração em milissegundos para manter os LEDs acesos
 
 //% weight=100 color=#0fbc11 icon=""
-namespace custom {
+namespace teste {
     /**
      * Acende todos os LEDs do Microbit com o brilho especificado por uma duração determinada.
      * @param ledOn se true, acende os LEDs; se false, apaga os LEDs
@@ -72,3 +72,4 @@ namespace custom {
             led.unplot(3, 4);
             led.unplot(4, 4);
 
+        }}}
