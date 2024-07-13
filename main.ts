@@ -5,7 +5,7 @@
 // @param duration duração em milissegundos para manter os LEDs acesos
 
 //% weight=100 color=#0fbc11 icon=""
-namespace teste {
+namespace seguelinha {
     /**
      * Acende todos os LEDs do Microbit com o brilho especificado por uma duração determinada.
      * @param ledOn se true, acende os LEDs; se false, apaga os LEDs
@@ -79,19 +79,19 @@ namespace teste {
 
 // Função para ler o sensor de linha
 // Exemplo básico para um sensor de linha conectado a P0
-function lerSensorLinha(): boolean {
+  export function lerSensorLinha(): boolean {
     return pins.digitalReadPin(DigitalPin.P0) == 1;
 }
 
 // Função para ler o sensor ultrassônico
 // Exemplo básico para sensor ultrassônico conectado a P1 (trigger) e P2 (echo)
-function lerSensorUltrassonico(): number {
+  export function lerSensorUltrassonico(): number {
     // Implementar lógica para medir distância
     return 0;
 }
 
 // Função para controlar o carrinho seguidor de linha
-function controlarCarrinho(): void {
+  export function controlarCarrinho(): void {
     // Implementar lógica para seguir a linha usando os sensores de linha
     // e ajustar a direção conforme necessário
 }
