@@ -40,11 +40,7 @@ namespace SeguidordeLinha {
         while (!input.buttonIsPressed(Button.B)) {
             basic.pause(100);
         }
-     basic.showString("AB");
-        while (!input.buttonIsPressed(Button.A+B)) {
-            basic.pause(100);
-        }
-
+    
         blackLeft = getFilteredReading(leftSensorPin, true);
         blackCenter = getFilteredReading(centerSensorPin, true);
         blackRight = getFilteredReading(rightSensorPin, true);
