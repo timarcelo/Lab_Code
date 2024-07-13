@@ -85,7 +85,7 @@ namespace SeguidordeLinha {
             whiteValue = whiteRight;
             blackValue = blackRight;
         }
-        return (sensorValue > whiteValue && sensorValue < blackValue);
+        return (sensorValue > whiteValue && sensorValue == blackValue && sensorValue < blackValue);
     }
 
     function getFilteredReading(pin: AnalogPin, isCalibration: boolean): number {
