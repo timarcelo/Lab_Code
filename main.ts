@@ -17,7 +17,7 @@ namespace SeguidordeLinha {
 
     //% blockId=Seguidor_de_Linha_create block="crie seguidor de linha com sensor esquerdo em %leftPin|e sensor direito em %rightPin"
     //% weight=100 blockSetVariable=SeguidordeLinha
-    export function create(leftPin: AnalogPin, rightPin: AnalogPin): void {
+    export function create(leftPin: AnalogPin, centerPin: AnalogPin, rightPin: AnalogPin): void {
         leftSensorPin = leftPin;
         centerSensorPin = centerPin;
         rightSensorPin = rightPin;
@@ -66,7 +66,7 @@ namespace SeguidordeLinha {
 
     //% blockId=Seguidor_de_Linha_is_on_line block="usar sensor %sensor"
     //% weight=70
-    export function isOnLine(sensor: SeguidordelinhaSensor): boolean {
+    export function isOnLine(sensor: SeguidordeLinhaSensor): boolean {
         let sensorValue: number;
         let whiteValue: number;
         let blackValue: number;
@@ -111,9 +111,11 @@ namespace SeguidordeLinha {
     // Enum for sensors
     export enum SeguidordeLinhaSensor {
         //% block="left"
-        Left,
+        Esquerdo,
+         //% block="right"
+        Central,
         //% block="right"
-        Right
+        Direito
     }
 }
 
