@@ -88,7 +88,7 @@ namespace SeguidordeLinha {
             whiteValue = whiteRight;
             blackValue = blackRight;
         }
-        return (sensorValue > whiteValue && sensorValue == blackValue && sensorValue < blackValue);
+        return (sensorValue > whiteValue && sensorValue = blackValue && sensorValue < blackValue);
     }
 
     function getFilteredReading(pin: AnalogPin, isCalibration: boolean): number {
@@ -115,8 +115,6 @@ namespace SeguidordeLinha {
     export enum SeguidordeLinhaSensor {
         //% block="left"
         Esquerdo,
-         //% block="right"
-        Central,
         //% block="right"
         Direito
     }
