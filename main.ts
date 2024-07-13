@@ -1,128 +1,226 @@
-namespace SeguidordeLinha {
-    let leftSensorPin: AnalogPin;
-    let centerSensorPin: AnalogPin;
-    let rightSensorPin: AnalogPin;
-
-    let whiteLeft: number;
-    let blackLeft: number;
-    let blackLCenter: number;
-    let whiteCenter: number;
-    let whiteRight: number;
-    let blackRight: number;
-
-    let leftSensorValue: number = 0;
-    let centerSensorValue: number = 0;
-    let rightSensorValue: number = 0;
-    const ALPHA = 0.5; // Współczynnik wygładzania (między 0 a 1)
-
-    //% blockId=Seguidor_de_Linha_create block="crie seguidor de linha com sensor esquerdo em %leftPin|e sensor direito em %rightPin"
-    //% weight=100 blockSetVariable=SeguidordeLinha
-    export function create(leftPin: AnalogPin, centerPin: AnalogPin, rightPin: AnalogPin): void {
-        leftSensorPin = leftPin;
-        centerSensorPin = centerPin;
-        rightSensorPin = rightPin;
-    }
-
-    //% blockId=Seguidor_de_Linha_calibrate block="calibrar sensores"
-    //% weight=90
-    export function calibrate(): void {
-        basic.showString("W");
-        while (!input.buttonIsPressed(Button.A)) {
-            basic.pause(100);
-        }
-
-        whiteLeft = getFilteredReading(leftSensorPin, true);
-        whiteCenter = getFilteredReading(centerSensorPin, true);
-        whiteRight = getFilteredReading(rightSensorPin, true);
-
-    }
-    basic.showString("B");
-    while (!input.buttonIsPressed(Button.B)) {
-        basic.pause(100);
-    }
-
-    blackLeft = getFilteredReading(leftSensorPin, true);
-    blackCenter = getFilteredReading(centerSensorPin, true);
-    blackRight = getFilteredReading(rightSensorPin, true);
-
-    basic.showString("C");
-    while (!input.buttonIsPressed(Button.A + B) + !input.buttonIsPressed(Button.B)) {
-        basic.pause(100);
-    }
-    basic.showIcon(IconNames.Yes);
+const enum DistanceUnit {
+    //% block="cm"
+    CM = 58, // Duration of echo round-trip in Microseconds (uS) for two centimeters, 343 m/s at sea level and 20°C
+    //% block="inch"
+    INCH = 148, // Duration of echo round-trip in Microseconds (uS) for two inches, 343 m/s at sea level and 20°C
 }
 
-//% blockId=Seguidor_de_Linha_read_left block="grave sensor esquerdo"
+//% color=#0fbc11 icon="\u272a" block="<LAB_CODE>"
+//% category="MakerBit"
+namespace < LAB_CODE > {
+//    const MICROBIT_LABCODE_ULTRASONIC_OBJECT_DETECTED_ID = 798;
+  //  const MAX_ULTRASONIC_TRAVEL_TIME = 300 * DistanceUnit.CM;
+  //  const ULTRASONIC_MEASUREMENTS = 3;
+
+    interface UltrasonicRoundTrip {
+            ts: number;
+    rtt: number;
+}
+
+interface UltrasonicDevice {
+    trig: DigitalPin | undefined;
+    roundTrips: UltrasonicRoundTrip[];
+    medianRoundTrip: number;
+    travelTimeObservers: number[];
+}
+
+let ultrasonicState: UltrasonicDevice;
+
+/**
+ * Configures the ultrasonic distance sensor and measures continuously in the background.
+ * @param trig pin connected to trig, eg: DigitalPin.P12
+ * @param echo pin connected to echo, eg: DigitalPin.P13
+ */
+//% subcategory="Ultrasonico"
+//% blockId="labcode_ultrasonico_connectado"
+//% block="connecte o sensor de distancia ultrasonico | with Trig at %trig | and Echo at %echo"
+//% trig.fieldEditor="gridpicker"
+//% trig.fieldOptions.columns=4
+//% trig.fieldOptions.tooltips="false"
+//% echo.fieldEditor="gridpicker"
+//% echo.fieldOptions.columns=4
+//% echo.fieldOptions.tooltips="false"
 //% weight=80
-export function readLeftSensor(): number {
-    return Math.round(getFilteredReading(leftSensorPin, false));
-}
-
-//% blockId=Seguidor_de_Linha_read_right block="grave sensor direito"
-//% weight=80
-export function readRightSensor(): number {
-    return Math.round(getFilteredReading(rightSensorPin, false));
-}
-//% blockId=Seguidor_de_Linha_read_center block="grave sensor central"
-//% weight=80
-export function readRightSensor(): number {
-    return Math.round(getFilteredReading(centerSensorPin, false));
-}
-
-//% blockId=Seguidor_de_Linha_is_on_line block="usar sensor %sensor"
-//% weight=70
-export function isOnLine(sensor: SeguidordeLinhaSensor): boolean {
-    let sensorValue: number;
-    let whiteValue: number;
-    let blackValue: number;
-
-    if (sensor === SeguidordeLinhaSensor.Left) {
-        sensorValue = Math.round(getFilteredReading(leftSensorPin, false));
-        whiteValue = whiteLeft;
-        blackValue = blackLeft;
+export function connectUltrasonicDistanceSensor(
+    trig: DigitalPin,
+    echo: DigitalPin
+): void {
+    if (ultrasonicState && ultrasonicState.trig) {
+        return;
     }
-   // else {
-     //   sensorValue = Math.round(getFilteredReading(centerSensorPin, false));
-      //  whiteValue = whiteRight;
-       // blackValue = blackRight;
-   // }
-      else {
-        sensorValue = Math.round(getFilteredReading(rightSensorPin, false));
-        whiteValue = whiteRight;
-        blackValue = blackRight;
-    }
-    return (sensorValue > whiteValue && sensorValue < blackValue);
-}
 
-function getFilteredReading(pin: AnalogPin, isCalibration: boolean): number {
-    let currentValue = pins.analogReadPin(pin);
-
-    if (pin === leftSensorPin) {
-        if (isCalibration) {
-            leftSensorValue = currentValue;
-        } else {
-            leftSensorValue = ALPHA * currentValue + (1 - ALPHA) * leftSensorValue;
-        }
-        return leftSensorValue;
+    if (!ultrasonicState) {
+        ultrasonicState = {
+            trig: trig,
+            roundTrips: [{ ts: 0, rtt: MAX_ULTRASONIC_TRAVEL_TIME }],
+            medianRoundTrip: MAX_ULTRASONIC_TRAVEL_TIME,
+            travelTimeObservers: [],
+        };
     } else {
-        if (isCalibration) {
-            rightSensorValue = currentValue;
-        } else {
-            rightSensorValue = ALPHA * currentValue + (1 - ALPHA) * rightSensorValue;
+        ultrasonicState.trig = trig;
+    }
+
+    pins.onPulsed(echo, PulseValue.High, () => {
+        if (
+            pins.pulseDuration() < MAX_ULTRASONIC_TRAVEL_TIME &&
+            ultrasonicState.roundTrips.length <= ULTRASONIC_MEASUREMENTS
+        ) {
+            ultrasonicState.roundTrips.push({
+                ts: input.runningTime(),
+                rtt: pins.pulseDuration(),
+            });
         }
-        return rightSensorValue;
+    });
+
+    control.inBackground(measureInBackground);
+}
+
+/**
+ * Do something when an object is detected the first time within a specified range.
+ * @param distance distance to object, eg: 20
+ * @param unit unit of distance, eg: DistanceUnit.CM
+ * @param handler body code to run when the event is raised
+ */
+//% subcategory="Ultrasonico"
+//% blockId=labcode_ultrasonic_on_object_detected
+//% block="objeto detectado a | %distance | %unit"
+//% weight=69
+export function onUltrasonicObjectDetected(
+    distance: number,
+    unit: DistanceUnit,
+    handler: () => void
+) {
+    if (distance <= 0) {
+        return;
+    }
+
+    if (!ultrasonicState) {
+        ultrasonicState = {
+            trig: undefined,
+            roundTrips: [{ ts: 0, rtt: MAX_ULTRASONIC_TRAVEL_TIME }],
+            medianRoundTrip: MAX_ULTRASONIC_TRAVEL_TIME,
+            travelTimeObservers: [],
+        };
+    }
+
+    const travelTimeThreshold = Math.imul(distance, unit);
+
+    ultrasonicState.travelTimeObservers.push(travelTimeThreshold);
+
+    control.onEvent(
+        MICROBIT_LABCODE_ULTRASONIC_OBJECT_DETECTED_ID,
+        travelTimeThreshold,
+        () => {
+            handler();
+        }
+    );
+}
+
+/**
+ * Returns the distance to an object in a range from 1 to 300 centimeters or up to 118 inch.
+ * The maximum value is returned to indicate when no object was detected.
+ * -1 is returned when the device is not connected.
+ * @param unit unit of distance, eg: DistanceUnit.CM
+ */
+//% subcategory="Ultrasonico"
+//% blockId="labcode_ultrasonic_distance"
+//% block="Distancia é %unit"
+//% weight=60
+export function getUltrasonicDistance(unit: DistanceUnit): number {
+    if (!ultrasonicState) {
+        return -1;
+    }
+    basic.pause(0); // yield to allow background processing when called in a tight loop
+    return Math.idiv(ultrasonicState.medianRoundTrip, unit);
+}
+
+/**
+ * Returns `true` if an object is within the specified distance. `false` otherwise.
+ *
+ * @param distance distance to object, eg: 20
+ * @param unit unit of distance, eg: DistanceUnit.CM
+ */
+//% subcategory="Ultrasonico"
+//% blockId="labcode_ultrasonic_less_than"
+//% block="distância é menor que | %distance | %unit"
+//% weight=50
+export function isUltrasonicDistanceLessThan(
+    distance: number,
+    unit: DistanceUnit
+): boolean {
+    if (!ultrasonicState) {
+        return false;
+    }
+    basic.pause(0); // yield to allow background processing when called in a tight loop
+    return Math.idiv(ultrasonicState.medianRoundTrip, unit) < distance;
+}
+
+function triggerPulse() {
+    // Reset trigger pin
+    pins.setPull(ultrasonicState.trig, PinPullMode.PullNone);
+    pins.digitalWritePin(ultrasonicState.trig, 0);
+    control.waitMicros(2);
+
+    // Trigger pulse
+    pins.digitalWritePin(ultrasonicState.trig, 1);
+    control.waitMicros(10);
+    pins.digitalWritePin(ultrasonicState.trig, 0);
+}
+
+function getMedianRRT(roundTrips: UltrasonicRoundTrip[]) {
+    const roundTripTimes = roundTrips.map((urt) => urt.rtt);
+    return median(roundTripTimes);
+}
+
+// Returns median value of non-empty input
+function median(values: number[]) {
+    values.sort((a, b) => {
+        return a - b;
+    });
+    return values[(values.length - 1) >> 1];
+}
+
+function measureInBackground() {
+    const trips = ultrasonicState.roundTrips;
+    const TIME_BETWEEN_PULSE_MS = 145;
+
+    while (true) {
+        const now = input.runningTime();
+
+        if (trips[trips.length - 1].ts < now - TIME_BETWEEN_PULSE_MS - 10) {
+            ultrasonicState.roundTrips.push({
+                ts: now,
+                rtt: MAX_ULTRASONIC_TRAVEL_TIME,
+            });
+        }
+
+        while (trips.length > ULTRASONIC_MEASUREMENTS) {
+            trips.shift();
+        }
+
+        ultrasonicState.medianRoundTrip = getMedianRRT(
+            ultrasonicState.roundTrips
+        );
+
+        for (let i = 0; i < ultrasonicState.travelTimeObservers.length; i++) {
+            const threshold = ultrasonicState.travelTimeObservers[i];
+            if (threshold > 0 && ultrasonicState.medianRoundTrip <= threshold) {
+                control.raiseEvent(
+                    MICROBIT_LABCODE_ULTRASONIC_OBJECT_DETECTED_ID,
+                    threshold
+                );
+                // use negative sign to indicate that we notified the event
+                ultrasonicState.travelTimeObservers[i] = -threshold;
+            } else if (
+                threshold < 0 &&
+                ultrasonicState.medianRoundTrip > -threshold
+            ) {
+                // object is outside the detection threshold -> re-activate observer
+                ultrasonicState.travelTimeObservers[i] = -threshold;
+            }
+        }
+
+        triggerPulse();
+        basic.pause(TIME_BETWEEN_PULSE_MS);
     }
 }
-
-// Enum for sensors
-export enum SeguidordeLinhaSensor {
-    //% block="esquerdo"
-    Esquerdo,
-    //% block="central"
-    Central,
-    //% block="direito"
-    Direito
-}
-
-basic.pause(duration);
-basic.clearScreen();
