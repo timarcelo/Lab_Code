@@ -78,7 +78,7 @@ namespace SeguidordeLinha {
             sensorValue = Math.round(getFilteredReading(leftSensorPin, false));
             whiteValue = whiteLeft;
             blackValue = blackLeft;
-        } else if {
+        } else {
             sensorValue = Math.round(getFilteredReading(centerSensorPin, false));
             whiteValue = whiteRight;
             blackValue = blackRight;
