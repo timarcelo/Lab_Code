@@ -113,10 +113,11 @@ namespace SeguidordeLinha {
 
     // Enum for sensors
     export enum SeguidordeLinhaSensor {
-        //% block="left"
+        //% block="esquerdo"
         Esquerdo,
+          //% block="central"
         Central,
-        //% block="right"
+        //% block="direito"
         Direito
     }
 }
