@@ -4,7 +4,8 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "microphone": "*"
+        "microphone": "*",
+        "Lab_Code": "github:timarcelo/Lab_Code#f54296c2e3a91a5ed1eaca952de4928026588580"
     },
     "files": [
         "main.ts",
