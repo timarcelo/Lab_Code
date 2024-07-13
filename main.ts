@@ -1,13 +1,17 @@
 namespace SeguidordeLinha {
     let leftSensorPin: AnalogPin;
+    let centerSensorPin: AnalogPin;
     let rightSensorPin: AnalogPin;
 
     let whiteLeft: number;
     let blackLeft: number;
+    let blackLCenter: number;
+    let whiteCenter: number;
     let whiteRight: number;
     let blackRight: number;
 
     let leftSensorValue: number = 0;
+    let centerSensorValue: number = 0;
     let rightSensorValue: number = 0;
     const ALPHA = 0.5; // Współczynnik wygładzania (między 0 a 1)
 
@@ -15,6 +19,7 @@ namespace SeguidordeLinha {
     //% weight=100 blockSetVariable=SeguidordeLinha
     export function create(leftPin: AnalogPin, rightPin: AnalogPin): void {
         leftSensorPin = leftPin;
+        centerSensorPin = centerPin;
         rightSensorPin = rightPin;
     }
 
@@ -27,6 +32,7 @@ namespace SeguidordeLinha {
         }
 
         whiteLeft = getFilteredReading(leftSensorPin, true);
+        whiteCenter = getFilteredReading(centerSensorPin, true);
         whiteRight = getFilteredReading(rightSensorPin, true);
 
         basic.showString("B");
