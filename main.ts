@@ -124,7 +124,7 @@ export function onUltrasonicObjectDetected(
  */
 //% subcategory="Ultrassônico"
 //% blockId="labcode_ultrasonic_distance"
-//% block="Distancia é %unit"
+//% block="A distância é %unit"
 //% weight=60
 export function getUltrasonicDistance(unit: DistanceUnit): number {
     if (!ultrasonicState) {
@@ -142,7 +142,7 @@ export function getUltrasonicDistance(unit: DistanceUnit): number {
  */
 //% subcategory="Ultrassônico"
 //% blockId="labcode_ultrasonic_less_than"
-//% block="distância é menor que | %distance | %unit"
+//% block="A distância é menor que | %distance | %unit"
 //% weight=50
 export function isUltrasonicDistanceLessThan(
     distance: number,
