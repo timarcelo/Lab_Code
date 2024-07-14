@@ -5,12 +5,12 @@ const enum DistanceUnit {
     INCH = 148, // Duration of echo round-trip in Microseconds (uS) for two inches, 343 m/s at sea level and 20°C
 }
 
-//% color=#0fbc11 icon="\u272a" block="<LAB_CODE>"
+//% color=#1ebed6 icon="\u272a" block="<LAB_CODE>"
 //% category="LABCODE"
 namespace LAB_CODE {
- const MICROBIT_LABCODE_ULTRASONIC_OBJECT_DETECTED_ID = 798;
-  const MAX_ULTRASONIC_TRAVEL_TIME = 300 * DistanceUnit.CM;
-   const ULTRASONIC_MEASUREMENTS = 3;
+    const MICROBIT_LABCODE_ULTRASSONICO_OBJETO_DETECTADO_ID = 798;
+    const caminho_maximo = 300 * DistanceUnit.CM;
+    const MEDICOES_ULTRASSONICAS = 3;
 
     interface UltrasonicRoundTrip {
             ts: number;
@@ -33,7 +33,7 @@ let ultrasonicState: UltrasonicDevice;
  */
 //% subcategory="Ultrassônico"
 //% blockId="labcode_ultrassonico_connectado"
-//% block="conecte o sensor de distancia ultrassônico | com Trig em %trig | e Echo em %echo"
+//% block="conecte o sensor ultrassônico | em Trig em %trig | e Echo em %echo"
 //% trig.fieldEditor="gridpicker"
 //% trig.fieldOptions.columns=4
 //% trig.fieldOptions.tooltips="false"
@@ -52,8 +52,8 @@ export function connectUltrasonicDistanceSensor(
     if (!ultrasonicState) {
         ultrasonicState = {
             trig: trig,
-            roundTrips: [{ ts: 0, rtt: MAX_ULTRASONIC_TRAVEL_TIME }],
-            medianRoundTrip: MAX_ULTRASONIC_TRAVEL_TIME,
+            roundTrips: [{ ts: 0, rtt: caminho_maximo }],
+            medianRoundTrip: caminho_maximo,
             travelTimeObservers: [],
         };
     } else {
@@ -62,8 +62,8 @@ export function connectUltrasonicDistanceSensor(
 
     pins.onPulsed(echo, PulseValue.High, () => {
         if (
-            pins.pulseDuration() < MAX_ULTRASONIC_TRAVEL_TIME &&
-            ultrasonicState.roundTrips.length <= ULTRASONIC_MEASUREMENTS
+            pins.pulseDuration() < caminho_maximo &&
+            ultrasonicState.roundTrips.length <= MEDICOES_ULTRASSONICAS
         ) {
             ultrasonicState.roundTrips.push({
                 ts: input.runningTime(),
@@ -83,7 +83,7 @@ export function connectUltrasonicDistanceSensor(
  */
 //% subcategory="Ultrassônico"
 //% blockId=labcode_ultrasonic_on_object_detected
-//% block="objeto detectado a | %distance | %unit"
+//% block="Objeto detectado a | %distance | %unit"
 //% weight=69
 export function onUltrasonicObjectDetected(
     distance: number,
@@ -97,8 +97,8 @@ export function onUltrasonicObjectDetected(
     if (!ultrasonicState) {
         ultrasonicState = {
             trig: undefined,
-            roundTrips: [{ ts: 0, rtt: MAX_ULTRASONIC_TRAVEL_TIME }],
-            medianRoundTrip: MAX_ULTRASONIC_TRAVEL_TIME,
+            roundTrips: [{ ts: 0, rtt: caminho_maximo }],
+            medianRoundTrip: caminho_maximo,
             travelTimeObservers: [],
         };
     }
@@ -108,7 +108,7 @@ export function onUltrasonicObjectDetected(
     ultrasonicState.travelTimeObservers.push(travelTimeThreshold);
 
     control.onEvent(
-        MICROBIT_LABCODE_ULTRASONIC_OBJECT_DETECTED_ID,
+        MICROBIT_LABCODE_ULTRASSONICO_OBJETO_DETECTADO_ID,
         travelTimeThreshold,
         () => {
             handler();
@@ -123,7 +123,7 @@ export function onUltrasonicObjectDetected(
  * @param unit unit of distance, eg: DistanceUnit.CM
  */
 //% subcategory="Ultrassônico"
-//% blockId="labcode_ultrasonic_distance"
+//% blockId="labcode_ultrasSonico_distancia"
 //% block="A distância é %unit"
 //% weight=60
 export function getUltrasonicDistance(unit: DistanceUnit): number {
@@ -190,11 +190,11 @@ function measureInBackground() {
         if (trips[trips.length - 1].ts < now - TIME_BETWEEN_PULSE_MS - 10) {
             ultrasonicState.roundTrips.push({
                 ts: now,
-                rtt: MAX_ULTRASONIC_TRAVEL_TIME,
+                rtt: caminho_maximo,
             });
         }
 
-        while (trips.length > ULTRASONIC_MEASUREMENTS) {
+        while (trips.length > MEDICOES_ULTRASSONICAS) {
             trips.shift();
         }
 
@@ -206,7 +206,7 @@ function measureInBackground() {
             const threshold = ultrasonicState.travelTimeObservers[i];
             if (threshold > 0 && ultrasonicState.medianRoundTrip <= threshold) {
                 control.raiseEvent(
-                    MICROBIT_LABCODE_ULTRASONIC_OBJECT_DETECTED_ID,
+                    MICROBIT_LABCODE_ULTRASSONICO_OBJETO_DETECTADO_ID,
                     threshold
                 );
                 // use negative sign to indicate that we notified the event
