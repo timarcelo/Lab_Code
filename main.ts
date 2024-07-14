@@ -27,12 +27,12 @@ interface UltrasonicDevice {
 let ultrasonicState: UltrasonicDevice;
 
 /**
- * Configures the ultrasonic distance sensor and measures continuously in the background.
+ * Configures the ultrassonic distance sensor and measures continuously in the background.
  * @param trig pin connected to trig, eg: DigitalPin.P12
  * @param echo pin connected to echo, eg: DigitalPin.P13
  */
 //% subcategory="Ultrassonico"
-//% blockId="labcode_ultrasonico_connectado"
+//% blockId="labcode_ultrassonico_connectado"
 //% block="connecte o sensor de distancia ultrassonico | com Trig em %trig | e Echo em %echo"
 //% trig.fieldEditor="gridpicker"
 //% trig.fieldOptions.columns=4
