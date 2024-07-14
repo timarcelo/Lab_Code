@@ -81,7 +81,7 @@ export function connectUltrasonicDistanceSensor(
  * @param unit unit of distance, eg: DistanceUnit.CM
  * @param handler body code to run when the event is raised
  */
-//% subcategory="Ultrasonico"
+//% subcategory="Ultrassonico"
 //% blockId=labcode_ultrasonic_on_object_detected
 //% block="objeto detectado a | %distance | %unit"
 //% weight=69
@@ -122,7 +122,7 @@ export function onUltrasonicObjectDetected(
  * -1 is returned when the device is not connected.
  * @param unit unit of distance, eg: DistanceUnit.CM
  */
-//% subcategory="Ultrasonico"
+//% subcategory="Ultrassonico"
 //% blockId="labcode_ultrasonic_distance"
 //% block="Distancia é %unit"
 //% weight=60
@@ -140,7 +140,7 @@ export function getUltrasonicDistance(unit: DistanceUnit): number {
  * @param distance distance to object, eg: 20
  * @param unit unit of distance, eg: DistanceUnit.CM
  */
-//% subcategory="Ultrasonico"
+//% subcategory="Ultrassonico"
 //% blockId="labcode_ultrasonic_less_than"
 //% block="distância é menor que | %distance | %unit"
 //% weight=50
