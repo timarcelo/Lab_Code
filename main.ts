@@ -31,9 +31,9 @@ let ultrasonicState: UltrasonicDevice;
  * @param trig pin connected to trig, eg: DigitalPin.P12
  * @param echo pin connected to echo, eg: DigitalPin.P13
  */
-//% subcategory="Ultrassonico"
+//% subcategory="Ultrassônico"
 //% blockId="labcode_ultrassonico_connectado"
-//% block="connecte o sensor de distancia ultrassonico | com Trig em %trig | e Echo em %echo"
+//% block="conecte o sensor de distancia ultrassônico | com Trig em %trig | e Echo em %echo"
 //% trig.fieldEditor="gridpicker"
 //% trig.fieldOptions.columns=4
 //% trig.fieldOptions.tooltips="false"
@@ -81,7 +81,7 @@ export function connectUltrasonicDistanceSensor(
  * @param unit unit of distance, eg: DistanceUnit.CM
  * @param handler body code to run when the event is raised
  */
-//% subcategory="Ultrassonico"
+//% subcategory="Ultrassônico"
 //% blockId=labcode_ultrasonic_on_object_detected
 //% block="objeto detectado a | %distance | %unit"
 //% weight=69
