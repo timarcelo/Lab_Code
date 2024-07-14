@@ -31,9 +31,9 @@ let ultrasonicState: UltrasonicDevice;
  * @param trig pin connected to trig, eg: DigitalPin.P12
  * @param echo pin connected to echo, eg: DigitalPin.P13
  */
-//% subcategory="Ultrassonico"
-//% blockId="labcode_ultrassonico_connectado"
-//% block="connecte o sensor de distancia ultrassonico | com Trig em %trig | e Echo em %echo"
+//% subcategory="Ultrasonico"
+//% blockId="labcode_ultrasonico_connectado"
+//% block="connecte o sensor de distancia ultrasonico | com Trig em %trig | e Echo em %echo"
 //% trig.fieldEditor="gridpicker"
 //% trig.fieldOptions.columns=4
 //% trig.fieldOptions.tooltips="false"
