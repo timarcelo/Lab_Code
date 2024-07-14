@@ -222,4 +222,124 @@ function measureInBackground() {
 
         triggerPulse();
         basic.pause(TIME_BETWEEN_PULSE_MS);
-    }}}
+    }}
+    //% color=#1968bd icon="\uf1b9" block="Seguidor de Linha"
+    namespace SegidordeLinha {
+        let leftSensorPin: AnalogPin;
+        let rightSensorPin: AnalogPin;
+
+        let whiteLeft: number;
+        let blackLeft: number;
+        let whiteRight: number;
+        let blackRight: number;
+
+        let leftSensorValue: number = 0;
+        let rightSensorValue: number = 0;
+        const ALPHA = 0.5; // Współczynnik wygładzania (między 0 a 1)
+
+        //% blockId=CRIAR_SEGUIDOR_DE_LINHA block="Criar os sensores do seguidor, sensor esquerdo é %leftPin|o sensor Central é %centerPin| o sensor direito é %rightPin"
+        //% weight=100 blockSetVariable=seguelinha
+        export function create(leftPin: AnalogPin, centerPin: AnalogPin, rightPin: AnalogPin): void {
+            leftSensorPin = leftPin;
+            centerSensorPin = centertPin;
+            rightSensorPin = rightPin;
+        }
+
+        //% blockId=segue_linha_calibração block="calibrando os sensores"
+        //% weight=90
+        export function calibrate(): void {
+            basic.showString("W");
+            while (!input.buttonIsPressed(Button.A)) {
+                basic.pause(100);
+            }
+
+            whiteLeft = getFilteredReading(leftSensorPin, true);
+            whiteCenter = getFilteredReading(centerSensorPin, true);
+            whiteRight = getFilteredReading(rightSensorPin, true);
+
+            basic.showString("B");
+            while (!input.buttonIsPressed(Button.B)) {
+                basic.pause(100);
+            }
+
+            blackLeft = getFilteredReading(leftSensorPin, true);
+            blackCenter = getFilteredReading(centerSensorPin, true);
+            blackRight = getFilteredReading(rightSensorPin, true);
+
+            basic.showIcon(IconNames.Yes);
+        }
+
+        //% blockId=segue_linha_marcando_esquerdo block="gravando sensor esquerdo"
+        //% weight=80
+        export function readLeftSensor(): number {
+            return Math.round(getFilteredReading(leftSensorPin, false));
+        }
+
+        //% blockId=segue_linha_marcando_central block="gravando sensor central"
+        //% weight=80
+        export function readRightSensor(): number {
+            return Math.round(getFilteredReading(rightSensorPin, false));
+        }
+
+        //% blockId=segue_linha_marcando_direito block="gravando sensor direito"
+        //% weight=80
+        export function readRightSensor(): number {
+            return Math.round(getFilteredReading(rightSensorPin, false));
+        }
+
+        //% blockId=segue_linha_ativo block="Sensor ativo %sensor"
+        //% weight=70
+        export function isOnLine(sensor: SegueLinhaSensor): boolean {
+            let sensorValue: number;
+            let whiteValue: number;
+            let blackValue: number;
+
+            if (sensor === LineFollowerSensor.Left) {
+                sensorValue = Math.round(getFilteredReading(leftSensorPin, false));
+                whiteValue = whiteLeft;
+                blackValue = blackLeft;
+            } else {
+                sensorValue = Math.round(getFilteredReading(centerSensorPin, false));
+                whiteValue = whiteRight;
+                blackValue = blackRight;
+            }  else {
+                sensorValue = Math.round(getFilteredReading(rightSensorPin, false));
+                whiteValue = whiteRight;
+                blackValue = blackRight;
+            }
+
+
+            return (sensorValue > whiteValue && sensorValue < blackValue);
+        }
+
+        function getFilteredReading(pin: AnalogPin, isCalibration: boolean): number {
+            let currentValue = pins.analogReadPin(pin);
+
+            if (pin === leftSensorPin) {
+                if (isCalibration) {
+                    leftSensorValue = currentValue;
+                } else {
+                    leftSensorValue = ALPHA * currentValue + (1 - ALPHA) * leftSensorValue;
+                }
+                return leftSensorValue;
+            } else {
+                if (isCalibration) {
+                    rightSensorValue = currentValue;
+                } else {
+                    rightSensorValue = ALPHA * currentValue + (1 - ALPHA) * rightSensorValue;
+                }
+                return rightSensorValue;
+            }
+        }
+
+        // Enum for sensors
+        export enum SegueLinhaSensor {
+            //% block="Central"
+            Central,
+        //% block="Esquerdo"
+        Esquerdo,
+            //% block="Direito"
+            Direito
+        }
+    }
+    }
