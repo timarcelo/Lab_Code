@@ -223,7 +223,7 @@ function measureInBackground() {
         triggerPulse();
         basic.pause(TIME_BETWEEN_PULSE_MS);
     }}
-    //% color=#0fbc11 icon="\uf1b9" block="Sensores de Linha"
+  //% subcategory="Seguidor de Linha"
     namespace sensoreslinha {
         let leftSensorPin: AnalogPin;
         let rightSensorPin: AnalogPin;
