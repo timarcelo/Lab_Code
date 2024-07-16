@@ -125,7 +125,6 @@ export function getUltrasonicDistance(unit: DistanceUnit): number {
     }
     basic.pause(0); // yield to allow background processing when called in a tight loop
     return Math.idiv(ultrasonicState.medianRoundTrip, unit);
-}
 
 /**
  * Returns `true` if an object is within the specified distance. `false` otherwise.
@@ -690,7 +689,7 @@ function measureInBackground() {
             return dht11state == DHT11_state.DHT11_humidity ? _dht11_humi : _dht11_temp
 
         }
-    }
+    
 
   //% subcategory="Seguidor de Linha"
     namespace sensoreslinha {
@@ -794,4 +793,4 @@ function measureInBackground() {
             //% block="direito"
             Right
         }
-    }
+    }}
