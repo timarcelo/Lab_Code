@@ -232,7 +232,7 @@ function measureInBackground() {
     }
 
     //% weight=10 color=#0fbc11 icon="\uf015"
-    /* Sensores {
+    //% subcategory="Sensores" {
         let Reference_VOLTAGE = 3100
         let crashSensorPin: DigitalPin
         export enum DHT11_state {
