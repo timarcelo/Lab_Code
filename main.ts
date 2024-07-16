@@ -223,7 +223,7 @@ function measureInBackground() {
         //% block="(℉)" enumval=1
         TMP36_temperature_F,
     }
-
+    namespace sensores{
     //% weight=10 color=#0fbc11 icon="\uf015"
    
         let Reference_VOLTAGE = 3100
@@ -793,4 +793,4 @@ function measureInBackground() {
             //% block="direito"
             Right
         }
-    }}
+    }}}
