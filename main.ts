@@ -453,7 +453,7 @@ function measureInBackground() {
             }
             noise = Math.round(noise)
             return Math.round(noise)
-        }
+        
         /**
         * Sensor de Temperatura e Umidade DHT11
         * @param Descreve o parametro do sensor dht11 aqui, ex.: DigitalPin.P15     
@@ -688,11 +688,10 @@ function measureInBackground() {
 
             return dht11state == DHT11_state.DHT11_humidity ? _dht11_humi : _dht11_temp
 
-        }
-    
+           
 
-  //% subcategory="Seguidor de Linha"
-    namespace sensoreslinha {
+ 
+    namespace Seguidor_de_linha {
         let leftSensorPin: AnalogPin;
         let rightSensorPin: AnalogPin;
 
@@ -793,4 +792,4 @@ function measureInBackground() {
             //% block="direito"
             Right
         }
-    }}}
+    }}}}}
