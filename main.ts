@@ -17,13 +17,6 @@ namespace LAB_CODE {
     rtt: number;
 }
 
-interface UltrasonicDevice {
-    trig: DigitalPin | undefined;
-    roundTrips: UltrasonicRoundTrip[];
-    medianRoundTrip: number;
-    travelTimeObservers: number[];
-}
-
 let ultrasonicState: UltrasonicDevice;
 
 /**
@@ -115,7 +108,7 @@ export function onUltrasonicObjectDetected(
         }
     );
 }
-
+}
 /**
  * Returns the distance to an object in a range from 1 to 300 centimeters or up to 118 inch.
  * The maximum value is returned to indicate when no object was detected.
@@ -218,7 +211,7 @@ function measureInBackground() {
                 // object is outside the detection threshold -> re-activate observer
                 ultrasonicState.travelTimeObservers[i] = -threshold;
             }
-        }
+        }}
 
         triggerPulse();
         basic.pause(TIME_BETWEEN_PULSE_MS);
@@ -800,4 +793,4 @@ function measureInBackground() {
             //% block="direito"
             Right
         }
-    }}}
+    }
