@@ -216,6 +216,7 @@ function measureInBackground() {
         triggerPulse();
         basic.pause(TIME_BETWEEN_PULSE_MS);
     }
+     //% subcategory=Sensores {
     enum TMP36Type {
         //% block="(℃)" enumval=0
         TMP36_temperature_C,
@@ -225,7 +226,7 @@ function measureInBackground() {
     }
 
     //% weight=10 color=#0fbc11 icon="\uf015"
-    //% subcategory="Sensores" {
+   
         let Reference_VOLTAGE = 3100
         let crashSensorPin: DigitalPin
         export enum DHT11_state {
