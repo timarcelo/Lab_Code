@@ -17,9 +17,9 @@ namespace LAB_CODE {
     rtt: number;
 }
 
-let ultrasonicState: UltrasonicDevice;
+let ultrasonicState: UltrasonicDevice;{
 
-/**
+/**}
  * Configures the ultrassonic distance sensor and measures continuously in the background.
  * @param trig pin connected to trig, eg: DigitalPin.P12
  * @param echo pin connected to echo, eg: DigitalPin.P13
@@ -108,7 +108,7 @@ export function onUltrasonicObjectDetected(
         }
     );
 }
-}
+
 /**
  * Returns the distance to an object in a range from 1 to 300 centimeters or up to 118 inch.
  * The maximum value is returned to indicate when no object was detected.
@@ -119,6 +119,7 @@ export function onUltrasonicObjectDetected(
 //% blockId="labcode_ultrasSonico_distancia"
 //% block="A distância é %unit"
 //% weight=60
+
 export function getUltrasonicDistance(unit: DistanceUnit): number {
     if (!ultrasonicState) {
         return -1;
@@ -688,7 +689,7 @@ function measureInBackground() {
 
             return dht11state == DHT11_state.DHT11_humidity ? _dht11_humi : _dht11_temp
 
-           
+        }
 
  
     namespace Seguidor_de_linha {
